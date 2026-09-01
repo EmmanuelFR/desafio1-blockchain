@@ -70,6 +70,17 @@ class Blockchain:
 
     def __init__(self) -> None:
         self.cadeia: list[Bloco] = [self._criar_bloco_genese()]
+        self.moeda = "EDU"
+        self.carteiras: dict[str, dict[str, str | int]] = {
+            "CARTEIRA-001": {
+                "usuario": "Emmanuel Freitas",
+                "saldo": 100,
+            },
+            "CARTEIRA-002": {
+                "usuario": "Weberson Rodrigues",
+                "saldo": 100,
+            },
+        }
 
     @staticmethod
     def _criar_bloco_genese() -> Bloco:

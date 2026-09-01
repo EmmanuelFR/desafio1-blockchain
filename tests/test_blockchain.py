@@ -42,3 +42,16 @@ def test_detecta_alteracao_em_um_bloco() -> None:
 
     assert cadeia_valida is False
     assert "bloco 1" in mensagem
+
+
+def test_cria_carteiras_iniciais() -> None:
+    blockchain = Blockchain()
+
+    assert blockchain.moeda == "EDU"
+    assert len(blockchain.carteiras) == 2
+
+    assert blockchain.carteiras["CARTEIRA-001"]["usuario"] == "Emmanuel Freitas"
+    assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == 100
+
+    assert blockchain.carteiras["CARTEIRA-002"]["usuario"] == "Weberson Rodrigues"
+    assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == 100
