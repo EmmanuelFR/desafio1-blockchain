@@ -195,3 +195,35 @@ def test_transacao_rejeitada_nao_altera_saldos_nem_cria_bloco() -> None:
     assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == saldo_origem_inicial
     assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == saldo_destino_inicial
     assert len(blockchain.cadeia) == quantidade_blocos_inicial
+
+
+def test_realiza_transacoes_nos_dois_sentidos() -> None:
+    blockchain = Blockchain()
+
+    primeira_transacao, _ = blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        25,
+    )
+    segunda_transacao, _ = blockchain.realizar_transacao(
+        "CARTEIRA-002",
+        "CARTEIRA-001",
+        40,
+    )
+
+    saldo_total = sum(
+        carteira["saldo"]
+        for carteira in blockchain.carteiras.values()
+    )
+    cadeia_valida, _ = blockchain.validar_cadeia()
+
+    assert primeira_transacao is True
+    assert segunda_transacao is True
+    assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == 115
+    assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == 85
+    assert saldo_total == 200
+    assert len(blockchain.cadeia) == 3
+    assert blockchain.cadeia[1].dados["carteira_origem"] == "CARTEIRA-001"
+    assert blockchain.cadeia[2].dados["carteira_origem"] == "CARTEIRA-002"
+    assert blockchain.cadeia[2].hash_anterior == blockchain.cadeia[1].hash
+    assert cadeia_valida is True
