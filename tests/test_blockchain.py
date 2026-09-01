@@ -133,3 +133,65 @@ def test_rejeita_transacao_com_valor_zero() -> None:
 
     assert transacao_valida is False
     assert mensagem == "O valor da transação deve ser maior que zero."
+
+
+def test_realiza_transacao_e_atualiza_saldos() -> None:
+    blockchain = Blockchain()
+
+    transacao_realizada, mensagem = blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        25,
+    )
+
+    assert transacao_realizada is True
+    assert mensagem == "Transação realizada com sucesso."
+    assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == 75
+    assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == 125
+
+
+def test_transacao_realizada_cria_bloco_encadeado() -> None:
+    blockchain = Blockchain()
+    bloco_anterior = blockchain.cadeia[-1]
+
+    transacao_realizada, _ = blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        25,
+    )
+
+    novo_bloco = blockchain.cadeia[-1]
+    cadeia_valida, _ = blockchain.validar_cadeia()
+
+    assert transacao_realizada is True
+    assert len(blockchain.cadeia) == 2
+    assert novo_bloco.hash_anterior == bloco_anterior.hash
+    assert novo_bloco.dados == {
+        "tipo": "transacao",
+        "carteira_origem": "CARTEIRA-001",
+        "usuario_origem": "Emmanuel Freitas",
+        "carteira_destino": "CARTEIRA-002",
+        "usuario_destino": "Weberson Rodrigues",
+        "valor": 25,
+        "moeda": "EDU",
+    }
+    assert cadeia_valida is True
+
+
+def test_transacao_rejeitada_nao_altera_saldos_nem_cria_bloco() -> None:
+    blockchain = Blockchain()
+    saldo_origem_inicial = blockchain.carteiras["CARTEIRA-001"]["saldo"]
+    saldo_destino_inicial = blockchain.carteiras["CARTEIRA-002"]["saldo"]
+    quantidade_blocos_inicial = len(blockchain.cadeia)
+
+    transacao_realizada, mensagem = blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        150,
+    )
+
+    assert transacao_realizada is False
+    assert mensagem == "Saldo insuficiente."
+    assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == saldo_origem_inicial
+    assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == saldo_destino_inicial
+    assert len(blockchain.cadeia) == quantidade_blocos_inicial

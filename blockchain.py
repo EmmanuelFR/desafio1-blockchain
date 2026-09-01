@@ -130,6 +130,37 @@ class Blockchain:
 
         return True, "Transação válida."
 
+    def realizar_transacao(
+        self,
+        origem: str,
+        destino: str,
+        valor: int,
+    ) -> tuple[bool, str]:
+        """Valida a operação e transfere EDU entre duas carteiras."""
+
+        transacao_valida, mensagem = self.validar_transacao(
+            origem,
+            destino,
+            valor,
+        )
+        if not transacao_valida:
+            return False, mensagem
+
+        self.carteiras[origem]["saldo"] -= valor
+        self.carteiras[destino]["saldo"] += valor
+
+        dados_transacao = {
+            "tipo": "transacao",
+            "carteira_origem": origem,
+            "usuario_origem": self.carteiras[origem]["usuario"],
+            "carteira_destino": destino,
+            "usuario_destino": self.carteiras[destino]["usuario"],
+            "valor": valor,
+            "moeda": self.moeda,
+        }
+        self.adicionar_bloco(dados_transacao)
+
+        return True, "Transação realizada com sucesso."
 
     def validar_cadeia(self) -> tuple[bool, str]:
         """Valida os hashes armazenados e as ligações entre os blocos."""
