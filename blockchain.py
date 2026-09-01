@@ -104,6 +104,33 @@ class Blockchain:
         self.cadeia.append(novo_bloco)
         return novo_bloco
 
+    def validar_transacao(
+        self,
+        origem: str,
+        destino: str,
+        valor: int,
+    ) -> tuple[bool, str]:
+        """Verifica se uma transação pode ser realizada."""
+
+        if origem not in self.carteiras:
+            return False, "Carteira de origem não encontrada."
+
+        if destino not in self.carteiras:
+            return False, "Carteira de destino não encontrada."
+
+        if origem == destino:
+            return False, "As carteiras de origem e destino devem ser diferentes."
+
+        if valor <= 0:
+            return False, "O valor da transação deve ser maior que zero."
+
+        saldo_origem = self.carteiras[origem]["saldo"]
+        if saldo_origem < valor:
+            return False, "Saldo insuficiente."
+
+        return True, "Transação válida."
+
+
     def validar_cadeia(self) -> tuple[bool, str]:
         """Valida os hashes armazenados e as ligações entre os blocos."""
 

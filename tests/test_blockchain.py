@@ -55,3 +55,81 @@ def test_cria_carteiras_iniciais() -> None:
 
     assert blockchain.carteiras["CARTEIRA-002"]["usuario"] == "Weberson Rodrigues"
     assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == 100
+
+
+def test_valida_transacao_com_saldo_suficiente() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        25,
+    )
+
+    assert transacao_valida is True
+    assert mensagem == "Transação válida."
+
+
+def test_rejeita_transacao_com_saldo_insuficiente() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        150,
+    )
+
+    assert transacao_valida is False
+    assert mensagem == "Saldo insuficiente."
+
+
+def test_rejeita_transacao_com_origem_inexistente() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-999",
+        "CARTEIRA-002",
+        25,
+    )
+
+    assert transacao_valida is False
+    assert mensagem == "Carteira de origem não encontrada."
+
+
+def test_rejeita_transacao_com_destino_inexistente() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-999",
+        25,
+    )
+
+    assert transacao_valida is False
+    assert mensagem == "Carteira de destino não encontrada."
+
+
+def test_rejeita_transacao_para_a_mesma_carteira() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-001",
+        25,
+    )
+
+    assert transacao_valida is False
+    assert mensagem == "As carteiras de origem e destino devem ser diferentes."
+
+
+def test_rejeita_transacao_com_valor_zero() -> None:
+    blockchain = Blockchain()
+
+    transacao_valida, mensagem = blockchain.validar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        0,
+    )
+
+    assert transacao_valida is False
+    assert mensagem == "O valor da transação deve ser maior que zero."
