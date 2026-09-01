@@ -36,6 +36,21 @@ if cadeia_valida:
 else:
     st.error(mensagem_validacao)
 
+st.subheader("Carteiras educacionais")
+
+colunas_carteiras = st.columns(len(blockchain.carteiras))
+for coluna, (identificador, carteira) in zip(
+    colunas_carteiras,
+    blockchain.carteiras.items(),
+):
+    with coluna:
+        st.markdown(f"**{carteira['usuario']}**")
+        st.caption(identificador)
+        st.metric(
+            "Saldo disponível",
+            f"{carteira['saldo']} {blockchain.moeda}",
+        )
+
 st.subheader("Blocos registrados")
 
 for bloco in blockchain.cadeia:
