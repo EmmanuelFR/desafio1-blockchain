@@ -5,8 +5,10 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.pyc
 
 # Configurações e arquivos locais
 .env
 .DS_Store
 Thumbs.db
+.streamlit/secrets.toml
