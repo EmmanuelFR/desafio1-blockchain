@@ -114,6 +114,16 @@ else:
         "Realize uma transação para criar um bloco que possa ser adulterado."
     )
 
+if st.button(
+    "Reiniciar demonstração",
+    help=(
+        "Descarta os blocos e saldos atuais desta sessão e restaura "
+        "o estado inicial."
+    ),
+):
+    st.session_state.blockchain = Blockchain()
+    st.rerun()
+
 cadeia_valida, mensagem_validacao = blockchain.validar_cadeia()
 
 coluna_blocos, coluna_status = st.columns(2)
