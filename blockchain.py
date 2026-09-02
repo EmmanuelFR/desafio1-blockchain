@@ -162,6 +162,34 @@ class Blockchain:
 
         return True, "Transação realizada com sucesso."
 
+    def simular_adulteracao(
+        self,
+        indice: int,
+        novo_valor: int,
+    ) -> tuple[bool, str]:
+        """Altera um valor registrado sem recalcular o hash do bloco."""
+
+        if indice <= 0 or indice >= len(self.cadeia):
+            return False, "Selecione um bloco de transação válido."
+
+        bloco = self.cadeia[indice]
+        if bloco.dados.get("tipo") != "transacao":
+            return False, "O bloco selecionado não contém uma transação."
+
+        if novo_valor <= 0:
+            return False, "O novo valor deve ser maior que zero."
+
+        valor_original = bloco.dados["valor"]
+        if novo_valor == valor_original:
+            return False, "O novo valor deve ser diferente do valor registrado."
+
+        bloco.dados["valor"] = novo_valor
+
+        return True, (
+            f"Valor do bloco {indice} alterado de {valor_original} "
+            f"para {novo_valor} {self.moeda}."
+        )
+
     def validar_cadeia(self) -> tuple[bool, str]:
         """Valida os hashes armazenados e as ligações entre os blocos."""
 
