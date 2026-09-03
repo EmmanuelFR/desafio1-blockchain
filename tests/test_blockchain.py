@@ -44,6 +44,19 @@ def test_detecta_alteracao_em_um_bloco() -> None:
     assert "bloco 1" in mensagem
 
 
+def test_detecta_ligacao_invalida_entre_blocos() -> None:
+    blockchain = Blockchain()
+    bloco = blockchain.adicionar_bloco({"operacao": "teste"})
+
+    bloco.hash_anterior = "hash-anterior-invalido"
+    bloco.hash = bloco.calcular_hash()
+
+    cadeia_valida, mensagem = blockchain.validar_cadeia()
+
+    assert cadeia_valida is False
+    assert mensagem == "A ligação do bloco 1 está inválida."
+
+
 def test_cria_carteiras_iniciais() -> None:
     blockchain = Blockchain()
 

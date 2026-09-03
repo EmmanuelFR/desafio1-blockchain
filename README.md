@@ -191,12 +191,13 @@ Execute:
 python -m pytest -v
 ```
 
-O projeto possui **20 testes automatizados**, que verificam:
+O projeto possui **21 testes automatizados**, que verificam:
 
 - criação do bloco gênese;
 - criação e encadeamento de novos blocos;
 - validação de uma cadeia íntegra;
 - detecção de alteração em um bloco;
+- detecção de ligações inválidas entre blocos;
 - criação das carteiras iniciais;
 - regras de validação das transações;
 - atualização dos saldos;
@@ -211,7 +212,7 @@ O projeto possui **20 testes automatizados**, que verificam:
 Resultado esperado:
 
 ```text
-20 passed
+21 passed
 ```
 
 ## Limitações e finalidade acadêmica
