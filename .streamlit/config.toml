@@ -1,0 +1,15 @@
+[theme]
+base = "light"
+primaryColor = "#2563EB"
+
+redColor = "#DC2626"
+redBackgroundColor = "#FDD6D6"
+redTextColor = "#7F1D1D"
+
+yellowColor = "#D97706"
+yellowBackgroundColor = "#FEF3C7"
+yellowTextColor = "#78350F"
+
+greenColor = "#16A34A"
+greenBackgroundColor = "#DCFCE7"
+greenTextColor = "#14532D"
