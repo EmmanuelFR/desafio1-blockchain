@@ -28,7 +28,8 @@ O projeto permite compreender os seguintes conceitos:
 ### Blockchain e integridade
 
 - criação automática do bloco gênese;
-- registro de data e hora em UTC;
+- registro interno de data e hora em UTC;
+- conversão da data e hora para o horário de Brasília na interface;
 - cálculo determinístico do hash de cada bloco;
 - encadeamento por meio do campo `hash_anterior`;
 - validação dos hashes armazenados;
@@ -50,10 +51,15 @@ Antes de realizar uma transferência, a aplicação verifica:
 - existência da carteira de destino;
 - diferença entre origem e destino;
 - valor maior que zero;
-- saldo suficiente na carteira de origem.
+- saldo suficiente na carteira de origem;
+- integridade da cadeia antes do registro de uma nova operação.
 
 Uma transação válida atualiza os saldos e cria um novo bloco com os dados da
-operação. Uma transação recusada não altera os saldos e não modifica a cadeia.
+operação.
+
+Uma transação recusada não altera os saldos e não modifica a cadeia.
+Quando a cadeia está inválida, novas transações são bloqueadas até que a
+demonstração seja reiniciada.
 
 ### Demonstração de adulteração
 
@@ -82,6 +88,7 @@ restaura o estado inicial:
 
 - Python 3.12;
 - Streamlit;
+- CSS para personalização visual da interface;
 - pytest;
 - SHA-256 por meio do módulo `hashlib`;
 - Git e GitHub para controle de versão.
@@ -90,13 +97,20 @@ restaura o estado inicial:
 
 ```text
 desafio1-blockchain/
+├── .gitignore
+├── .streamlit/
+│   ├── config.toml
+│   └── styles.css
 ├── app.py
 ├── blockchain.py
 ├── requirements.txt
 ├── README.md
 ├── docs/
-│   ├── relatorio_tecnico.md
+│   ├── Relatorio_Tecnico_Desafio_1.docx
+│   ├── Relatorio_Tecnico_Desafio_1_V2.docx
 │   ├── Relatorio_Tecnico_Desafio_1_V3.docx
+│   ├── relatorio_tecnico.md
+│   ├── relatorio_tecnico_v2.md
 │   └── relatorio_tecnico_v3.md
 └── tests/
     └── test_blockchain.py
@@ -108,7 +122,10 @@ desafio1-blockchain/
 - `app.py`: contém a interface e o gerenciamento da sessão no Streamlit;
 - `tests/test_blockchain.py`: contém os testes automatizados;
 - `requirements.txt`: registra as dependências do projeto;
-- `docs/`: reúne as versões da documentação técnica.
+- `docs/`: reúne as versões da documentação técnica;
+- `.streamlit/config.toml`: define o tema e a paleta de cores da aplicação;
+- `.streamlit/styles.css`: centraliza os estilos visuais da interface;
+- `.gitignore`: impede o versionamento de arquivos locais e temporários.
 
 ## Preparação do ambiente no Windows 11
 
@@ -163,7 +180,8 @@ deactivate
 7. Informe um valor diferente do originalmente registrado.
 8. Pressione **Simular adulteração**.
 9. Observe que a cadeia passa a ser considerada inválida.
-10. Pressione **Reiniciar demonstração** para restaurar o estado inicial.
+10. Tente realizar uma nova transação e observe que a operação é bloqueada.
+11. Pressione **Reiniciar demonstração** para restaurar o estado inicial.
 
 ## Testes automatizados
 
@@ -173,7 +191,7 @@ Execute:
 python -m pytest -v
 ```
 
-O projeto possui **19 testes automatizados**, que verificam:
+O projeto possui **20 testes automatizados**, que verificam:
 
 - criação do bloco gênese;
 - criação e encadeamento de novos blocos;
@@ -187,12 +205,13 @@ O projeto possui **19 testes automatizados**, que verificam:
 - transferências nos dois sentidos;
 - conservação do saldo total;
 - simulação controlada de adulteração;
-- rejeição de tentativas inválidas de adulteração.
+- rejeição de tentativas inválidas de adulteração;
+- bloqueio de novas transações quando a cadeia está inválida.
 
 Resultado esperado:
 
 ```text
-19 passed
+20 passed
 ```
 
 ## Limitações e finalidade acadêmica
@@ -216,6 +235,6 @@ aplicação.
 
 ## Documentação técnica
 
-A pasta `docs` contém o relatório técnico em Markdown e a versão V3 em Word.
-A V3 documenta a evolução do projeto até a implementação da demonstração de
-adulteração e do reinício controlado da aplicação.
+A pasta `docs` reúne as versões V1, V2 e V3 do relatório técnico em Markdown
+e Word. A V3 documenta a evolução do projeto até a implementação da
+demonstração de adulteração e do reinício controlado da aplicação.
