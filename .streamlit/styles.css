@@ -112,3 +112,13 @@
 .string-value {
     color: #6D28D9 !important;
 }
+
+/* Tradução da instrução de envio dos formulários */
+[data-testid="InputInstructions"] > span:first-child {
+    font-size: 0;
+}
+
+[data-testid="InputInstructions"] > span:first-child::after {
+    content: "Pressione Enter para enviar.";
+    font-size: 0.875rem;
+}
