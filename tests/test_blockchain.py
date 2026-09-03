@@ -306,3 +306,36 @@ def test_rejeita_adulteracao_sem_mudar_o_valor() -> None:
     assert mensagem == "O novo valor deve ser diferente do valor registrado."
     assert blockchain.cadeia[1].dados["valor"] == 25
     assert cadeia_valida is True
+
+
+def test_rejeita_transacao_quando_cadeia_esta_invalida() -> None:
+    blockchain = Blockchain()
+    blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        25,
+    )
+    blockchain.simular_adulteracao(
+        1,
+        999,
+    )
+
+    saldo_origem_antes = blockchain.carteiras["CARTEIRA-001"]["saldo"]
+    saldo_destino_antes = blockchain.carteiras["CARTEIRA-002"]["saldo"]
+    quantidade_blocos_antes = len(blockchain.cadeia)
+
+    transacao_realizada, mensagem = blockchain.realizar_transacao(
+        "CARTEIRA-001",
+        "CARTEIRA-002",
+        10,
+    )
+    cadeia_valida, _ = blockchain.validar_cadeia()
+
+    assert transacao_realizada is False
+    assert mensagem == (
+        "Não é possível realizar transações enquanto a cadeia estiver inválida."
+    )
+    assert blockchain.carteiras["CARTEIRA-001"]["saldo"] == saldo_origem_antes
+    assert blockchain.carteiras["CARTEIRA-002"]["saldo"] == saldo_destino_antes
+    assert len(blockchain.cadeia) == quantidade_blocos_antes
+    assert cadeia_valida is False

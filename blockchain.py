@@ -138,6 +138,13 @@ class Blockchain:
     ) -> tuple[bool, str]:
         """Valida a operação e transfere EDU entre duas carteiras."""
 
+        cadeia_valida, _ = self.validar_cadeia()
+        if not cadeia_valida:
+            return False, (
+                "Não é possível realizar transações enquanto a cadeia "
+                "estiver inválida."
+            )
+
         transacao_valida, mensagem = self.validar_transacao(
             origem,
             destino,
