@@ -7,12 +7,17 @@ infraestrutura de uma blockchain pública real.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
 import hashlib
 import json
-from typing import Any
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
+from typing import Any, TypedDict
 
+class DadosCarteira(TypedDict):
+    """Define os dados armazenados em uma carteira educacional."""
+
+    usuario: str
+    saldo: int
 
 @dataclass
 class Bloco:
@@ -70,8 +75,8 @@ class Blockchain:
 
     def __init__(self) -> None:
         self.cadeia: list[Bloco] = [self._criar_bloco_genese()]
-        self.moeda = "EDU"
-        self.carteiras: dict[str, dict[str, str | int]] = {
+        self.moeda: str = "EDU"
+        self.carteiras: dict[str, DadosCarteira] = {
             "CARTEIRA-001": {
                 "usuario": "Emmanuel Freitas",
                 "saldo": 100,
