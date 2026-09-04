@@ -106,12 +106,7 @@ desafio1-blockchain/
 ├── requirements.txt
 ├── README.md
 ├── docs/
-│   ├── Relatorio_Tecnico_Desafio_1.docx
-│   ├── Relatorio_Tecnico_Desafio_1_V2.docx
-│   ├── Relatorio_Tecnico_Desafio_1_V3.docx
-│   ├── relatorio_tecnico.md
-│   ├── relatorio_tecnico_v2.md
-│   └── relatorio_tecnico_v3.md
+│   └── relatorio_tecnico.md
 └── tests/
     └── test_blockchain.py
 ```
@@ -215,6 +210,27 @@ Resultado esperado:
 21 passed
 ```
 
+## Descentralização conceitual
+
+A aplicação desenvolvida executa localmente e mantém uma única cópia da cadeia
+em memória. Portanto, não implementa uma rede descentralizada real, múltiplos
+nós ou um mecanismo de consenso.
+
+Conceitualmente, uma blockchain descentralizada distribuiria cópias do
+registro entre diferentes participantes da rede. Esses participantes
+validariam as operações segundo regras comuns, sem depender exclusivamente de
+uma autoridade central.
+
+Neste protótipo, os hashes SHA-256, o encadeamento entre os blocos e a
+validação da integridade demonstram a confiança baseada em tecnologia. Uma
+alteração no conteúdo de um bloco modifica o hash calculado e permite que a
+inconsistência seja identificada.
+
+Assim, o projeto representa os fundamentos técnicos que sustentam uma
+blockchain, enquanto a distribuição entre nós e o consenso permanecem como
+aspectos conceituais, compatíveis com a finalidade acadêmica e com o escopo
+simplificado da implementação.
+
 ## Limitações e finalidade acadêmica
 
 Esta implementação possui finalidade exclusivamente educacional. Ela não
@@ -236,6 +252,4 @@ aplicação.
 
 ## Documentação técnica
 
-A pasta `docs` reúne as versões V1, V2 e V3 do relatório técnico em Markdown
-e Word. A V3 documenta a evolução do projeto até a implementação da
-demonstração de adulteração e do reinício controlado da aplicação.
+A pasta `docs` contém o relatório técnico final do projeto em Markdown.
