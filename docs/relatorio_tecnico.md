@@ -10,7 +10,7 @@
 
 **RA:** E33006
 
-**Data:** 04/09/2026
+**Data:** 09/09/2026
 
 *Valença/RJ*
 
@@ -20,7 +20,7 @@
 
 Este relatório apresenta uma aplicação acadêmica desenvolvida para simular os fundamentos de uma blockchain. A solução cria blocos encadeados por hashes SHA-256, mantém duas carteiras educacionais, registra transferências na unidade fictícia EDU e permite verificar a integridade da cadeia por meio de uma adulteração controlada.
 
-Este projeto reúne a revisão do código, o bloqueio de novas transações quando a cadeia está inválida, o aprimoramento da tipagem das carteiras, a reorganização dos estilos da interface, a conversão visual do horário UTC para o horário de Brasília, melhorias de UX/UI, a atualização do README e a ampliação da suíte automatizada.
+Este projeto reúne a revisão do código, o bloqueio de novas transações quando a cadeia está inválida, o aprimoramento da tipagem das carteiras, a reorganização dos estilos da interface, a conversão visual do horário UTC para o horário de Brasília, melhorias de UX/UI, a correção da validação dos valores numéricos nos formulários, a atualização do README e a ampliação da suíte automatizada.
 
 *Estado final verificado:* 21 testes automatizados aprovados; transações válidas registradas em novos blocos; adulteração detectada sem modificação retroativa dos saldos; novas transações bloqueadas enquanto a cadeia estiver inválida; reinício da demonstração restaura um bloco gênese, saldos de 100 EDU e integridade válida.
 
@@ -196,6 +196,8 @@ Os saldos iniciais são definidos no estado das carteiras quando a classe Blockc
 
 Antes de movimentar qualquer saldo, a aplicação verifica a integridade da cadeia e executa todas as regras da transação. Essa ordem evita estados parciais: uma operação rejeitada termina antes de qualquer modificação nas carteiras ou na cadeia.
 
+Na interface, os campos numéricos permitem que valores iguais a zero ou negativos sejam encaminhados às regras de negócio. A classe `Blockchain` realiza a validação efetiva e recusa esses valores antes de modificar saldos, blocos ou hashes. Essa abordagem mantém a regra centralizada no domínio e evita divergências entre o valor digitado e o valor processado pelo formulário.
+
 *Regras de validação de uma transação*
 
 | **Regra**                | **Condição de rejeição**          | **Mensagem**                                                           |
@@ -240,7 +242,7 @@ Quando todas as regras são satisfeitas, o método `realizar_transacao` debita a
 
 A interface apresenta o título do projeto, o formulário de nova transação, a demonstração de adulteração, os indicadores de quantidade de blocos e integridade, as duas carteiras com seus saldos e os dados de cada bloco em componentes expansíveis. O bloco mais recente permanece aberto por padrão, enquanto os anteriores podem ser consultados sob demanda.
 
-A instância de `Blockchain` é mantida em `st.session_state`. Essa escolha é necessária porque o Streamlit reexecuta o script quando há interação. O estado da sessão permite que saldos e blocos permaneçam disponíveis durante o uso da página. O formulário agrupa origem, destino e valor e só envia os dados quando o botão é acionado.
+A instância de `Blockchain` é mantida em `st.session_state`. Essa escolha é necessária porque o Streamlit reexecuta o script quando há interação. O estado da sessão permite que saldos e blocos permaneçam disponíveis durante o uso da página. O formulário agrupa origem, destino e valor e envia os dados quando é submetido pelo botão “Realizar transação” ou pela tecla Enter.
 
 *Persistência:* Session State mantém o estado apenas durante a sessão ativa. Reiniciar o processo, limpar a sessão ou recarregar em determinadas condições recria a blockchain com os saldos iniciais. Não há banco de dados nem arquivo de persistência.
 
@@ -295,7 +297,7 @@ O botão *Reiniciar demonstração* substitui o objeto guardado em `st.session_s
 
 ### Checkpoint da Etapa 1
 
-Estabeleceu a base funcional da blockchain educacional e criou o ponto inicial do histórico versionado.
+Estabelece a base funcional da blockchain educacional e cria o ponto inicial do histórico versionado.
 
 *Implementação da Etapa 1*
 
@@ -320,7 +322,7 @@ Acrescenta os usuários, as carteiras, as regras de transação, o registro das 
 
 ### Checkpoints da Etapa 3
 
-Incorpora a adulteração controlada, sua demonstração na interface e o reinício do estado. A etapa também consolida arquivos auxiliares.
+Incorpora a adulteração controlada, sua demonstração na interface e o reinício do estado. A etapa também registra ajustes no versionamento e o relatório técnico provisório V3.
 
 *Implementação da Etapa 3*
 
@@ -348,6 +350,8 @@ Distribuída em checkpoints de documentação, interface, integridade, tipagem, 
 | **b961709** | Consolidação do README e .gitignore       | Documentação atualizada e padrão redundante removido          |
 | **5a17a33** | Teste de ligação inválida                 | Verificação direta do vínculo entre blocos                    |
 | **dead5a0** | Tradução da instrução dos formulários     | Texto de apoio apresentado em português                       |
+| **8b326b2** | Consolidação da documentação técnica final | Relatório técnico final em Markdown e organização definitiva da documentação |
+| **c4f0c5b** | Correção da validação dos formulários     | Valores inválidos recusados sem alterar saldos, blocos ou integridade |
 
 ## Testes e evidências de funcionamento
 
@@ -474,20 +478,22 @@ Os 21 testes aprovados demonstram que as funcionalidades permanecem válidas e q
 
 [4] PYTHON SOFTWARE FOUNDATION. dataclasses - Data classes. Disponível em: [https://docs.python.org/3/library/dataclasses.html](https://docs.python.org/3/library/dataclasses.html). Acesso em: 1 set. 2026.
 
-[5] STREAMLIT. st.form. Disponível em: [https://docs.streamlit.io/develop/api-reference/execution-flow/st.form](https://docs.streamlit.io/develop/api-reference/execution-flow/st.form). Acesso em: 1 set. 2026.
+[5] STREAMLIT. *st.number_input*. Disponível em: [https://docs.streamlit.io/develop/api-reference/widgets/st.number_input](https://docs.streamlit.io/develop/api-reference/widgets/st.number_input). Acesso em: 9 set. 2026.
 
-[6] STREAMLIT. Session State. Disponível em: [https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state). Acesso em: 1 set. 2026.
+[6] STREAMLIT. *st.form*. Disponível em: [https://docs.streamlit.io/develop/api-reference/execution-flow/st.form](https://docs.streamlit.io/develop/api-reference/execution-flow/st.form). Acesso em: 1 set. 2026.
 
-[7] PYTEST. Get started. Disponível em: [https://docs.pytest.org/en/stable/getting-started.html](https://docs.pytest.org/en/stable/getting-started.html). Acesso em: 1 set. 2026.
+[7] STREAMLIT. *Session State*. Disponível em: [https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state). Acesso em: 1 set. 2026.
 
-[8] STREAMLIT. st.rerun. Disponível em: [https://docs.streamlit.io/develop/api-reference/execution-flow/st.rerun](https://docs.streamlit.io/develop/api-reference/execution-flow/st.rerun). Acesso em: 2 set. 2026.
+[8] PYTEST. *Get started*. Disponível em: [https://docs.pytest.org/en/stable/getting-started.html](https://docs.pytest.org/en/stable/getting-started.html). Acesso em: 1 set. 2026.
+
+[9] STREAMLIT. *st.rerun*. Disponível em: [https://docs.streamlit.io/develop/api-reference/execution-flow/st.rerun](https://docs.streamlit.io/develop/api-reference/execution-flow/st.rerun). Acesso em: 2 set. 2026.
 
 ### UX/UI e usabilidade
 
-[9] INTERACTION DESIGN FOUNDATION. *What are heuristics?* [S. l.]: IxDF, 2026. Disponível em: [https://ixdf.org/literature/topics/heuristics](https://ixdf.org/literature/topics/heuristics). Acesso em: 4 set. 2026.
+[10] INTERACTION DESIGN FOUNDATION. *What are heuristics?* [S. l.]: IxDF, 2026. Disponível em: [https://ixdf.org/literature/topics/heuristics](https://ixdf.org/literature/topics/heuristics). Acesso em: 4 set. 2026.
 
 ### Material didático da disciplina
 
-[10] UNIFAA - CENTRO UNIVERSITÁRIO DE VALENÇA. Blockchain e Contratos Inteligentes: a revolução da confiança, segurança e descentralização digital. Apresentação de slides da Unidade 4 da disciplina Desrupt IR Specialist - Explorando os Novos Horizontes das Tecnologias. Valença, 2026. 7 slides. Material disponibilizado em aula.
+[11] UNIFAA - CENTRO UNIVERSITÁRIO DE VALENÇA. *Blockchain e Contratos Inteligentes: a revolução da confiança, segurança e descentralização digital*. Apresentação de slides da Unidade 4 da disciplina Desrupt IR Specialist - Explorando os Novos Horizontes das Tecnologias. Valença, 2026. 7 slides. Material disponibilizado em aula.
 
 **Emmanuel de Freitas Ribeiro**
