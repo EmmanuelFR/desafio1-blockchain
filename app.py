@@ -72,7 +72,6 @@ with st.form("formulario_transacao"):
     )
     valor = st.number_input(
         f"Valor ({blockchain.moeda})",
-        min_value=1,
         value=1,
         step=1,
     )
@@ -111,7 +110,6 @@ if blocos_transacao:
         )
         novo_valor_adulterado = st.number_input(
             f"Novo valor registrado ({blockchain.moeda})",
-            min_value=1,
             value=999,
             step=1,
         )
